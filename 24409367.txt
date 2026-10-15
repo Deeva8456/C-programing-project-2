@@ -1,0 +1,271 @@
+
+24409367list of modules that make up my program are 
+1 randomNum.c / randomNum.h  
+
+2 array.c / array.h 
+           
+3 menufunc.c / menufunc.h
+
+4 stats.c / stats.h
+
+5 main.c 
+
+WF per module
+
+for randomNum.c / randomNum.h 
+
+radomNUM contains the first WF1
+void randomNuminit(void);
+int WF1randInt(int lower, int upper);
+
+for array.h / array.c
+
+array module contains the following functions;
+void WF2fillFromKeyboard(int arr[], int capacity);
+void WF3_fillRandom(int arr[], int size, int capacity, int min, int max);
+void WF4_clearArray(int arr[], int capacity);
+void WF5_sortArray(int arr[], int capacity);
+void WF6_randomizeArray(int arr[], int capacity);
+void WF7_printUsed(const int arr[], int capacity);
+void WF8_printAll(const int arr[], int capacity);
+int WF15_countUsed(const int arr[], int capacity);
+
+for stats.h/stats.c
+
+stats module contains the following functions;
+int WF9_minElement(const int arr[], int capacity);
+int WF10_maxElement(const int arr[], int capacity);
+double WF11_average(const int arr[], int capacity);
+double WF12_median(const int arr[], int capacity);
+double WF13_variance(const int arr[], int capacity);
+double WF14_stddev(const int arr[], int capacity);
+
+for menufun.h / menufunc.c
+this conatins all the menu functions 1-3
+
+void MF1(void);
+void MF2(void);
+void MF3(void);
+
+
+
+
+function specification:
+
+
+WF1: randomNumInit()
+
+Initializes the random number the purpose of this is so it can ensure random numbers are
+different for each run.
+  WF1randomint(int lower, int upper);
+this Generates a random integer between lower and upper (inclusive).
+
+WF2fillFromKeyboard(int arr[], int capacity)
+
+Prompts the user to enter integers one by one. When the user enters a negative number, input stops.
+All remaining positions in the array are filled with UNUSED_MARKER to indicate they are not used.
+This allows dynamic input but still keeps a fixed array size.
+
+WF3_fillRandom(int arr[], int size, int capacity, int min, int max)
+
+Automatically fills part of the array with random integers between min and max.
+If size is smaller than the total capacity, the remaining elements are marked unused.
+This function is useful for testing the rest of the system without manual input.
+
+WF4_clearArray(int arr[], int capacity)
+Resets all elements to the special unused marker value (UNUSED_MARKER).
+This provides a quick way to clear old data before refilling or reusing the array.
+
+WF5_sortArray(int arr[], int capacity)
+Sorts all used elements (those before the first unused marker) in ascending order using a bubble sort algorithm.
+After sorting, unused elements remain grouped at the end.
+Sorting ensures other statistical functions (like median) can work correctly.
+
+WF6_randomizeArray(int arr[], int capacity)
+shuffle all used elements into a random order 
+
+ WF7_printUsed(const int arr[], int capacity)
+Prints only the “used” portion of the array (up to the first unused marker) in { } format.
+Used to verify that fill, sort, or randomize operations worked correctly.
+
+WF8_printAll(const int arr[], int capacity)
+Prints the full contents of the array, including unused elements, to show its internal state.
+This helps visualize how much of the array is filled and where unused markers start.
+
+WF9_minElement(const int arr[], int capacity)
+Scans through all used elements of the array and finds the smallest (minimum) value.
+It starts with the first valid element as the initial minimum, then compares every other used element against it.
+
+If the array has no used elements (e.g., all marked with UNUSED_MARKER), the function returns the marker itself to indicate an empty dataset.
+
+WF10_maxElement(const int arr[], int capacity)
+Similar to WF9_minElement(), this function finds the largest (maximum) used value in the array.
+It initializes a variable max with the first used element, then iterates through all valid elements, updating max whenever a larger value is found.
+
+This function uses the MAX2(a, b) macro to select the larger of two numbers
+
+WF11_average(const int arr[], int capacity)
+Calculates the arithmetic mean (average) of all used elements.
+It adds up all valid elements, then divides the total by the count of used elements.
+If there are no used elements, the function returns 0.0.
+
+WF12_median(const int arr[], int capacity)
+Finds the median value (the middle value when the data is sorted).
+The function first copies all used elements into a temporary array and sorts them using a bubble sort
+If the number of used elements is odd, the middle element is returned.
+If it’s even, the median is the average of the two middle elements.
+If there are no used elements, the function returns 0.0.
+
+WF13_variance(const int arr[], int capacity)
+Computes the variance, which measures how much the data values differ from the average.
+The function first calculates the mean using WF11_average(), then computes the sum of squared differences between each used element and the mean.
+The total is then divided by the number of used elements to give the variance
+
+WF14_stddev(const int arr[], int capacity)
+Calculates the standard deviation, which is the square root of the variance.
+This function calls WF13_variance() internally, then applies the square root (sqrt) to the result.
+
+WF15_countUsed(const int arr[], int capacity)
+Counts the number of “active” (non-unused) elements in the array.
+It stops counting when it reaches the first UNUSED_MARKER.
+This function is frequently used by sorting, randomizing, and statistical routines to only process valid elements.
+
+
+4 Pseudocode for Each Working Function
+
+WF1
+  If lower > upper:
+        Swap lower and upper.
+    Return random integer in range [lower, upper].
+End function
+
+WF2
+
+  For i = 0 to capacity - 1:
+        Prompt user for value.
+        If value < 0:
+            For j = i to capacity - 1:
+                arr[j] = UNUSED_MARKER
+            Stop loop.
+        Else:
+            arr[i] = value
+End Function
+
+WF3
+
+For i = 0 to size - 1:
+        arr[i] = random integer between min and max.
+    For i = size to capacity - 1:
+        arr[i] = UNUSED_MARKER.
+end function
+
+WF4
+For i = 0 to capacity - 1:
+    arr[i] = UNUSED_MARKER.
+End functon
+
+WF5
+
+ n = countUsed(arr, capacity)
+    For i = 0 to n - 2:
+        For j = 0 to n - 2 - i:
+            If arr[j] > arr[j+1]:
+                Swap arr[j] and arr[j+1].
+    For i = n to capacity - 1:
+        arr[i] = UNUSED_MARKER
+End Function
+
+WF6
+    n = countUsed(arr, capacity)
+    For i = n - 1 down to 1:
+        j = random integer in [0, i]
+        Swap arr[i] and arr[j]
+    For i = n to capacity - 1:
+        arr[i] = UNUSED_MARKER
+End Function
+
+WF7
+    n = countUsed(arr, capacity)
+    Print '{'
+    For i = 0 to n - 1:
+        Print arr[i]
+    Print '}'
+End Function
+
+WF8
+    Print '{'
+    For i = 0 to capacity - 1:
+        Print arr[i]
+    Print '}'
+End Function
+
+WF9
+    n = countUsed(arr)
+    min = arr[0]
+    For i = 1 to n - 1:
+        If arr[i] < min:
+            min = arr[i]
+    Return min
+End Function
+
+WF10
+    n = countUsed(arr)
+    max = arr[0]
+    For i = 1 to n - 1:
+        If arr[i] > max:
+            max = arr[i]
+    Return max
+End Function
+
+WF11
+    n = countUsed(arr)
+    sum = 0
+    For i = 0 to n - 1:
+        sum = sum + arr[i]
+    Return sum / n
+End Function
+
+WF12
+    n ← countUsed(arr, capacity)
+    If n = 0 then
+        return 0
+For i from 0 to n - 1 do
+        temp[i] ← arr[i]
+
+       Sort temp array using bubble sort
+ For i from 0 to n - 2 do
+        For j from 0 to n - i - 2 do
+            If temp[j] > temp[j + 1] then
+                Swap temp[j] and temp[j + 1]
+
+    If n is odd then
+        median ← middle element
+    Else
+        median ← average of two middle elements
+
+    return median
+End Function
+
+      
+WF13
+    avg = average(arr)
+    sum = 0
+    For each element:
+        diff = arr[i] - avg
+        sum = sum + (diff * diff)
+    Return sum / n
+End Function
+
+WF14
+    Return square root of variance(arr)
+End Function
+
+WF15
+    count = 0
+    For i = 0 to capacity - 1:
+        If arr[i] == UNUSED_MARKER:
+            Break
+        count = count + 1
+    Return count
+End Function
+
